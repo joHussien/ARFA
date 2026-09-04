@@ -1,0 +1,24 @@
+# Core server
+Flask>=3.0
+flask-cors>=4.0
+requests>=2.31
+
+# Geospatial
+geopandas>=1.0
+pandas>=2.1
+numpy>=1.26
+shapely>=2.0
+pyproj>=3.6
+rasterio>=1.3
+affine>=2.4
+
+# Visualization (used by stage1 CLI only)
+folium>=0.16
+
+# Local LLM fallback (optional — only needed if no ARFA_GEMINI_KEY)
+# Comment these out if running Gemini-only to save disk space
+transformers>=4.45
+torch>=2.2
+
+# Fiona is required by geopandas for GDB file reading (USA Structures)
+fiona>=1.9
