@@ -24,7 +24,7 @@ ARFA does **not** label a route universally safe or a candidate facility a certi
 ## ARFA Demo
 
 ### Demo1. ARFA assessing flood possibility in Vermont.
-<img width="1862" height="1069" alt="image1" src="https://github.com/user-attachments/assets/de0512cf-fd74-4d6e-8b80-b0a322aff90f" />
+<img width="1858" height="1067" alt="image" src="https://github.com/user-attachments/assets/1547fbb2-08c1-4bd6-9869-addd619a4c42" />
 
 ### Demo2. ARFA Retrieving Schools from USA Structures Data
 <img width="1860" height="1075" alt="image2" src="https://github.com/user-attachments/assets/5a7cabd9-1eec-4c7e-b882-f0c19bc93495" />
