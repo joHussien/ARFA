@@ -1,4 +1,4 @@
-# ARFA: An Agentic System for Real-Time Riverine Flood Response
+<img width="1869" height="1066" alt="image3" src="https://github.com/user-attachments/assets/2e690f19-f9ab-4d20-8114-0b428b7c48ea" /><img width="1869" height="1066" alt="image3" src="https://github.com/user-attachments/assets/83dea35a-3067-4603-b256-fcd2e0d85812" /># ARFA: An Agentic System for Real-Time Riverine Flood Response
 
 ARFA is a hybrid agentic decision-support system developed for the **ACM SIGSPATIAL OASIS 2026 Challenge**. It connects natural-language responder requests to real-time hydrologic, flood-hazard, infrastructure, routing, and road-condition analysis.
 
@@ -20,6 +20,21 @@ ARFA supports three end-to-end flood-response workflows:
 3. **Evacuation routing** - generate route alternatives with OSRM and present travel time, HAND flood exposure, and reported TomTom road incidents as separate criteria.
 
 ARFA does **not** label a route universally safe or a candidate facility a certified shelter. HAND is used as terrain-based flood screening rather than a hydraulic inundation forecast, and reported road incidents may not capture every closure or hazard.
+
+## ARFA Demo
+
+### Demo1. ARFA assessing flood possibility in Vermont.
+<img width="1862" height="1069" alt="image1" src="https://github.com/user-attachments/assets/de0512cf-fd74-4d6e-8b80-b0a322aff90f" />
+
+### Demo2. ARFA Retrieving Schools from USA Structures Data
+<img width="1860" height="1075" alt="image2" src="https://github.com/user-attachments/assets/5a7cabd9-1eec-4c7e-b882-f0c19bc93495" />
+
+
+### Demo3. Evacuation Routing from A Responder to B Shelter
+<img width="1869" height="1066" alt="image3" src="https://github.com/user-attachments/assets/95dd7528-06c5-4fbe-be1d-d7dda272e0fd" />
+
+
+
 
 ## Architecture
 
