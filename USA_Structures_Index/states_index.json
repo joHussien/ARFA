@@ -1,0 +1,44 @@
+{
+  "IL": {
+    "name": "IL",
+    "gdb": "IL/IL_Structures.gdb",
+    "xml": "IL/IL_Structures_metadata.xml",
+    "bbox": [
+      -91.507266605,
+      36.983849153,
+      -87.497193821,
+      42.508081166
+    ],
+    "pub_date": "20230831",
+    "title": "IL_Structures",
+    "structure_count": 1398502
+  },
+  "IN": {
+    "name": "IN",
+    "gdb": "IN/IN_Structures.gdb",
+    "xml": "IN/IN_Structures_metadata.xml",
+    "bbox": [
+      -88.07355855,
+      37.787931421,
+      -84.791162507,
+      41.760769302
+    ],
+    "pub_date": "20230502",
+    "title": "IN_Structures",
+    "structure_count": 1442768
+  },
+  "MO": {
+    "name": "MO",
+    "gdb": "MO/MO_Structures.gdb",
+    "xml": "MO/MO_Structures_metadata.xml",
+    "bbox": [
+      -95.757210582,
+      35.996012991,
+      -89.112185939,
+      40.613042843
+    ],
+    "pub_date": "20230728",
+    "title": "MO_Structures",
+    "structure_count": 886272
+  }
+}

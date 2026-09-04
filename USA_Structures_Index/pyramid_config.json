@@ -1,0 +1,18 @@
+{
+  "H": 5,
+  "USA_BBOX": [
+    -180,
+    15,
+    -60,
+    75
+  ],
+  "GRID_COLS": 32,
+  "GRID_ROWS": 32,
+  "CELL_WIDTH_DEG": 3.75,
+  "CELL_HEIGHT_DEG": 1.875,
+  "TOTAL_STATES": 3,
+  "TOTAL_CELLS": 28,
+  "LEAF_CELLS": 14,
+  "built_at": "2026-08-27T12:27:41.372442+00:00",
+  "data_dir": "./Data_USA_Structures/2025_06"
+}
