@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ARFA — Flood Intelligence</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div id="topbar">
+  <div class="logo"><div class="ldot"></div>ARFA</div>
+
+  <div class="toolbar">
+    <!-- Panel toggles -->
+    <button class="tb-btn" id="tbChatBtn" onclick="toggleAgentPanel()" title="Toggle chat panel">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v7a2 2 0 01-2 2H6l-4 4V5z"/></svg>
+      Chat
+    </button>
+    <button class="tb-btn" id="tbGaugesBtn" onclick="toggleGaugePanel()" title="Toggle gauge panel">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a8 8 0 100 16A8 8 0 0010 2zm0 14a6 6 0 110-12 6 6 0 010 12zm.75-9.25a.75.75 0 00-1.5 0V10c0 .199.079.39.22.53l2.25 2.25a.75.75 0 101.06-1.06L10.75 9.69V6.75z"/></svg>
+      Gauges
+    </button>
+
+    <div class="tb-sep"></div>
+
+    <!-- Map actions -->
+    <button class="tb-btn" id="tbStructuresBtn" onclick="getStructures()" title="Load USA Structures">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h4a1 1 0 001-1v-3h2v3a1 1 0 001 1h4a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+      Structures
+    </button>
+    <label class="tb-toggle" id="tbStructuresToggleLabel" title="Show/hide structures on map">
+      <input id="structuresToggle" type="checkbox" onchange="toggleStructuresVisibility()" disabled/>
+      <span id="tbStructuresToggleText">Show</span>
+    </label>
+
+    <div class="tb-sep"></div>
+
+    <button class="tb-btn" id="tbRoadBtn" onclick="toggleIsolation()" title="TomTom live road status overlay">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/></svg>
+      Road status
+    </button>
+
+    <div class="tb-sep"></div>
+
+    <button class="tb-btn" id="tbRoutesBtn" onclick="toggleRoutesVisibility()" title="Hide/show routes" style="display:none">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+      Routes
+    </button>
+  </div>
+
+  <div class="tstat"><div class="pulse" id="pulse"></div><span id="stxt">Ready</span></div>
+</div>
+
+<!-- Progress bar for structures (full-width under topbar) -->
+<div id="structuresProgress">
+  <div id="structuresProgressTop">
+    <span id="structuresProgressText">Preparing structure query…</span>
+    <span id="structuresProgressCount">0</span>
+  </div>
+  <div id="structuresProgressTrack"><div id="structuresProgressBar"></div></div>
+</div>
+
+<div id="countyBar"></div>
+<div id="body">
+
+  <!-- Left panel: chat -->
+  <aside id="agentPanel" class="side-panel agent-side">
+    <div class="agent-head">
+      <div>
+        <h2>Evacuation Assistant</h2>
+        <p>Ask about flood conditions, facilities, and routes</p>
+      </div>
+      <button class="agent-reset" onclick="resetAgentSession()" title="Reset session">↻</button>
+    </div>
+
+    <div id="agentView" class="panel-view active">
+      <div id="routingPanel">
+        <div id="agentConversation" class="agent-conversation">
+          <div class="agent-message arfa">
+            <div class="agent-avatar">A</div>
+            <div class="agent-bubble">
+              <div class="agent-name">ARFA</div>
+              <div id="routingHint">Ask me about flood conditions in a location, for example: <b>What is the current flooding status of Oak Ridge, TN?</b></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="agentSuggestions" class="agent-suggestions"></div>
+
+        <div id="agentRouteTools" class="agent-route-tools hidden">
+          <div class="agent-route-context">
+            <div class="context-item"><span>Origin</span><strong id="originText">Not selected</strong></div>
+            <div class="context-arrow">→</div>
+            <div class="context-item"><span>Destination</span><strong id="destinationText">Select a shelter</strong></div>
+          </div>
+          <div class="agent-actions">
+            <button id="setOriginBtn" class="agent-chip" onclick="beginOriginSelection()">📍 Set origin</button>
+            <button id="findRoutesBtn" class="agent-chip primary" onclick="findRoutes()" disabled>Generate routes</button>
+            <button id="findFloodAwareBtn" class="agent-chip" onclick="findFloodAwareRoutes()" disabled title="Re-route to actively avoid the current flood hazard zone">🌊 Flood-aware routing</button>
+          </div>
+          <div id="routeResults" class="agent-route-results"></div>
+        </div>
+
+        <div class="agent-composer">
+          <input id="agentInput" type="text" placeholder="Message ARFA…" onkeydown="if(event.key==='Enter'){event.preventDefault();agentSubmit()}"/>
+          <button id="agentSendBtn" onclick="agentSubmit()">Send</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Center: map -->
+  <main id="mapW">
+    <div id="map"></div>
+    <div id="leg">
+      <h4>FLOOD INUNDATION</h4>
+      <div class="legend-section">
+        <div class="lr"><div class="ld" style="background:rgba(220,38,38,0.55);border-color:#991b1b"></div>Major</div>
+        <div class="lr"><div class="ld" style="background:rgba(248,113,113,0.5);border-color:#dc2626"></div>Moderate</div>
+        <div class="lr"><div class="ld" style="background:rgba(251,146,60,0.45);border-color:#ea580c"></div>Minor</div>
+        <div class="lr"><div class="ld" style="background:rgba(250,204,21,0.4);border-color:#ca8a04"></div>Action</div>
+      </div>
+      <div class="legend-section">
+        <div class="lr"><div class="ld" style="background:rgba(34,197,94,0.5);border-color:#16a34a;border-radius:50%"></div>Probable shelter</div>
+        <div class="lr"><div class="ld" style="background:rgba(59,130,246,0.5);border-color:#2563eb;border-radius:50%"></div>Route origin</div>
+        <div class="lr"><div class="ld" style="background:rgba(239,68,68,0.5);border-color:#dc2626;border-radius:50%"></div>Destination</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Right panel: gauges -->
+  <aside id="gaugePanel" class="side-panel gauge-side">
+    <div id="gaugesView" class="panel-view active">
+      <div id="ph"><h2>River gauges</h2><p id="psub">Enter a location to begin</p></div>
+      <div id="pb">
+        <div id="gl"><div class="empty"><p>No gauges loaded</p><span>Ask ARFA about a location to begin</span></div></div>
+        <div id="av">
+          <div id="ab" onclick="back()">← Back to list</div>
+          <div id="ah"><h3 id="atitle">—</h3><p id="ameta">—</p></div>
+          <div id="alog"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>window.ARFA_TOMTOM_KEY='';</script>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
