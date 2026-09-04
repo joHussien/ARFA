@@ -1,4 +1,4 @@
-<img width="1869" height="1066" alt="image3" src="https://github.com/user-attachments/assets/2e690f19-f9ab-4d20-8114-0b428b7c48ea" /><img width="1869" height="1066" alt="image3" src="https://github.com/user-attachments/assets/83dea35a-3067-4603-b256-fcd2e0d85812" /># ARFA: An Agentic System for Real-Time Riverine Flood Response
+# ARFA: An Agentic System for Real-Time Riverine Flood Response
 
 ARFA is a hybrid agentic decision-support system developed for the **ACM SIGSPATIAL OASIS 2026 Challenge**. It connects natural-language responder requests to real-time hydrologic, flood-hazard, infrastructure, routing, and road-condition analysis.
 
